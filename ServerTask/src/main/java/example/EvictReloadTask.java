@@ -15,7 +15,6 @@ public class EvictReloadTask implements ServerTask<String> {
 
    private static final ThreadLocal<TaskContext> taskContext = new ThreadLocal<>();
    private static final Log log = LogFactory.getLog(EvictReloadTask.class);
-   private TaskContext context = null;
    
 
    public EvictReloadTask() {
@@ -24,6 +23,7 @@ public class EvictReloadTask implements ServerTask<String> {
 
    @Override
    public String call() throws Exception {
+    log.info("call() called");
     TaskContext ctx = taskContext.get();
           AdvancedCache<?, ?> cache = ctx.getCache().get().getAdvancedCache();
           cache.withFlags(Flag.SKIP_CACHE_STORE).clear();
@@ -40,8 +40,7 @@ public class EvictReloadTask implements ServerTask<String> {
    @Override
   public void setTaskContext(TaskContext context) {
     log.info("setTaskContext called " + context.toString());
-    this.taskContext.set(context);
-
+    taskContext.set(context);
   }
 
   @Override

@@ -1,18 +1,16 @@
 package example;
 
-import org.infinispan.tasks.ServerTask;
-import org.infinispan.tasks.TaskContext;
 import org.infinispan.AdvancedCache;
-import org.infinispan.persistence.manager.PreloadManager;
-import org.infinispan.Cache;
 import org.infinispan.context.Flag;
-import org.infinispan.manager.EmbeddedCacheManager;
+import org.infinispan.persistence.manager.PreloadManager;
 import org.infinispan.tasks.ServerTask;
 import org.infinispan.tasks.TaskContext;
 import org.infinispan.tasks.TaskExecutionMode;
 import org.infinispan.util.logging.Log;
 import org.infinispan.util.logging.LogFactory;
+import org.kohsuke.MetaInfServices;
 
+@MetaInfServices(ServerTask.class)
 public class EvictReloadTask implements ServerTask<String> {
 
    private static final ThreadLocal<TaskContext> taskContext = new ThreadLocal<>();

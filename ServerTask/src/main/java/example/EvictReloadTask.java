@@ -25,11 +25,14 @@ public class EvictReloadTask implements ServerTask<String> {
    public String call() throws Exception {
     log.info("call() called");
     TaskContext ctx = taskContext.get();
-          AdvancedCache<?, ?> cache = ctx.getCache().get().getAdvancedCache();
-          cache.withFlags(Flag.SKIP_CACHE_STORE).clear();
-          cache.getComponentRegistry().getComponent(PreloadManager.class).start();
-          return null;
-    }
+
+    AdvancedCache<?, ?> cache = ctx.getCacheManager().getCache(ctx.getParameters().get().get("cacheName").toString()).getAdvancedCache();
+    
+    //AdvancedCache<?, ?> cache = ctx.getCache().get().getAdvancedCache();
+    cache.withFlags(Flag.SKIP_CACHE_STORE).clear();
+    cache.getComponentRegistry().getComponent(PreloadManager.class).start();
+    return null;
+  }
 
    @Override
    public String getName() {

@@ -11,7 +11,7 @@ import org.infinispan.util.logging.LogFactory;
 import org.kohsuke.MetaInfServices;
 
 @MetaInfServices(ServerTask.class)
-public class EvictReloadTask implements ServerTask<String> {
+public class EvictReloadTask implements ServerTask<String>, java.io.Serializable {
 
    private static final ThreadLocal<TaskContext> taskContext = new ThreadLocal<>();
    private static final Log log = LogFactory.getLog(EvictReloadTask.class);

@@ -1,0 +1,14 @@
+package example;
+
+message model_key {
+    required int32 id = 1;
+}
+
+message model_value {
+    required string name = 1;
+    optional string model = 2;
+    optional string soc = 3;
+    optional int32 memory_mb = 4;
+    optional bool ethernet = 5;
+    optional int32 release_year = 6;
+}

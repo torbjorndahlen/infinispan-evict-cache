@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+   name: cluster-config
+   namespace: infinispan-servertask-demo
+data:
+   infinispan-config.xml: >
+     <infinispan>
+       <cache-container>
+          <serialization version="1.0"
+                   marshaller="org.infinispan.commons.marshall.JavaSerializationMarshaller">
+          <allow-list>
+        <class>example.EvictReloadTask</class>
+      </allow-list>
+    </serialization>
+  </cache-container>
+     </infinispan>
+
+    

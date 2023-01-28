@@ -23,8 +23,8 @@ public class CacheServerTaskInvocation {
 
     RemoteCacheManager remoteCacheManager = new RemoteCacheManager(remoteBuilder.build(), true);
 
-    // obtain a handle to the remote default cache
-    RemoteCache<String, String> customCache = remoteCacheManager.getCache("rpi-store");
+    // obtain a handle to the remote cache
+    RemoteCache<String, String> customCache = remoteCacheManager.getCache(args[3]);
 
     Object returnFromTask = customCache.execute("EvictReloadTask");
     

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+      <groupId>example</groupId>
+      <artifactId>ServerTask</artifactId>
+      <version>1.0</version>
+  </parent>
+
+  <artifactId>ServerTaskServer</artifactId>
+  <packaging>jar</packaging>
+  <name>ServerTask: server side task</name>
+  <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <distribution>repo</distribution>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+  </licenses>
+
+    <dependencies>
+      <!-- Import the infinispan core -->
+      <dependency>
+         <groupId>org.infinispan</groupId>
+         <artifactId>infinispan-core</artifactId>
+         <scope>compile</scope>
+      </dependency>
+
+      <!-- Import the Infinispan tasks API-->
+      <dependency>
+          <groupId>org.infinispan</groupId>
+          <artifactId>infinispan-tasks-api</artifactId>
+      </dependency>
+
+      <dependency>
+         <groupId>org.kohsuke.metainf-services</groupId>
+         <artifactId>metainf-services</artifactId>
+         <version>1.9</version>
+      </dependency>
+   </dependencies>
+
+  <build>
+        <finalName>ServerTask</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${jar.plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+  </build>
+</project>
+ 

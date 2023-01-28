@@ -1,3 +1,5 @@
-target/classes/
-target/maven-archiver/
-target/maven-status/
+.DS_Store
+client/target/
+server/target/classes/
+server/target/maven-archiver/
+server/target/maven-status/

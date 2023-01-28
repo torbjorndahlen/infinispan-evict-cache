@@ -64,7 +64,7 @@
               <version>${exec.plugin.version}</version>
               <configuration>
                 <skip>false</skip>
-                <mainClass>example.CacheServerTaskInvocation</mainClass>
+                <mainClass>CacheServerTaskInvocation</mainClass>
               </configuration>
             </plugin>
         </plugins>

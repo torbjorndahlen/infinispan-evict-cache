@@ -3,10 +3,6 @@
  */
 package example;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
-
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
@@ -14,7 +10,6 @@ import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
 
 public class CacheServerTaskInvocation {
 
-  private static Logger logger = Logger.getLogger(CacheServerTaskInvocation.class.getName());
 
   /**
    * @param args

@@ -3,3 +3,5 @@ client/target/
 server/target/classes/
 server/target/maven-archiver/
 server/target/maven-status/
+server/target/dependency/
+target/

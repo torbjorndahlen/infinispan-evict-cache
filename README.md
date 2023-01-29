@@ -6,6 +6,38 @@ Server Task that evicts and reloads an SQL cache store
 Deploy a Posgresql DB in the same Openshift cluster as DataGrid.
 Create a table to be used as input to the DataGrid SQL cache store.
 
+````
+DB servername: postgreqsl
+DB name: rpi-store
+DB User: user
+DB password: secret
+`````
+### Create table
+
+````
+oc get pods
+oc rsh postgreqsl
+$>  pqsl rpi-store
+
+rpi-store=# create table model (
+    id integer primary key,
+    name varchar(20),
+    model varchar(20),
+    soc varchar(20),
+    memory_mb integer,
+    ethernet boolean,
+    release_year integer
+);
+
+rpi-store=# insert into model 
+(id, name, model, soc, memory_mb, ethernet, release_year) 
+values (1, 'Raspberry Pi', 'B', 'BCM2835', 256, TRUE, 2012);
+
+rpi-store=# grant all privileges on model to public; 
+
+rpi-store=# \q
+
+
 ## Server
 
 ### Build the server task
@@ -22,15 +54,24 @@ The server jar is located under server/target and needs to be added as a depende
 oc apply -f cluster-config.yaml
 ````
 2. Configure the DataGrid Operator
+
 Under Dependencies add Artifact Maven: org.postgresql:posgresql:42.3.1
-Under Dependencies add Artifact URL: https://github.com/torbjorndahlen/infinispan-evict-cache/raw/main/ServerTask/target/ServerTask-1.0-SNAPSHOT.jar
+
+Under Dependencies add Artifact URL: 
+
+https://github.com/torbjorndahlen/infinispan-evict-cache/raw/main/ServerTask/target/ServerTask-1.0-SNAPSHOT.jar
+
 Under Service Type, select DataGrid
+
 Under Expose select LoadBalancer (to allow unencrypted Hotrod clients)
+
 Under Security: Select EndPoint Encryption: None
+
 Under Config Map Name: <name of your config map for allowed Java serialization classes> e.g cluster-config
+
 The username and password for the Admin Console is located under Secrets in infinispan-generated-secret
 
-Get the LoadBalancer external hostname with oc get svc.
+Get the LoadBalancer external hostname with ```oc get svc```.
 Access the DataGrid console with http://<loadbalancer>:11222
 
 3. Use the DataGrid console to create a cache named "rpi-store"

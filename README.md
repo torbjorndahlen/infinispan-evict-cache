@@ -36,7 +36,7 @@ values (1, 'Raspberry Pi', 'B', 'BCM2835', 256, TRUE, 2012);
 rpi-store=# grant all privileges on model to public; 
 
 rpi-store=# \q
-
+```
 
 ## Server
 

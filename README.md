@@ -48,7 +48,10 @@ mvn assembly:assembly -DdescriptorId=jar-with-dependencies
 
 ### Run the client
 ```
-java -cp target/ServerTaskClient-jar-with-dependencies.jar <infinispan-external-loadbalancer-hostname:port> <infinispan-username> <password> <cache-name>
+java -cp target/ServerTaskClient-jar-with-dependencies.jar \
+> example.CacheServerTaskInvocation \
+> <infinispan-external-loadbalancer-hostname:port> \
+> <infinispan-username> <password> <cache-name>
 ````
 Note: use ```oc get svc``` to find the LoadBalancer hostname.
 

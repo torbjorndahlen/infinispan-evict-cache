@@ -1,5 +1,5 @@
 .DS_Store
-.vscode
+**/.vscode/
 client/target/
 server/target/classes/
 server/target/maven-archiver/

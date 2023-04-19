@@ -1,3 +1,5 @@
+#!/bin/bash
+
 FROM registry.redhat.io/rhel8/postgresql-12
 
 LABEL description="This is a custom Postgresql container image which loads the database schema definitions and the data into the model and inventory tables "

@@ -1,0 +1,21 @@
+﻿apiVersion: infinispan.org/v1
+kind: Infinispan
+metadata:
+  name: infinispan
+  namespace: infinispan-demo
+spec:
+  security:
+    endpointEncryption:
+      type: None
+      clientCert: None
+  expose:
+    type: LoadBalancer
+  dependencies:
+    artifacts:
+      - maven: 'org.postgresql:postgresql:42.3.1'
+      - url: >-
+          https://github.com/torbjorndahlen/infinispan-evict-cache/raw/main/ServerTask/target/ServerTask-1.0-SNAPSHOT.jar
+  service:
+    type: DataGrid
+  replicas: 1
+  configMapName: cluster-config

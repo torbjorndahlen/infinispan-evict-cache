@@ -20,9 +20,9 @@
             "package": "example"
           },
           "connection-pool": {             
-            "connection-url": "jdbc:postgresql://postgresql:5432/rpi-store",             
+            "connection-url": "jdbc:postgresql://postgresql-12-custom:5432/rpi-store",             
             "driver": "org.postgresql.Driver",             
-            "username": "user",             
+            "username": "infinispan",             
             "password": "secret"           
           }
         }

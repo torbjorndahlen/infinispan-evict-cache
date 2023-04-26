@@ -69,7 +69,7 @@ oc apply -f cluster-config.yaml
 
 2.6 Under Config Map Name: ```<name of your config map for allowed Java serialization classes>``` e.g cluster-config
 
-### Opend the DataGrid Admin Console
+### Open the DataGrid Admin Console
 
 The username and password for the Admin Console is located under Secrets in ```infinispan-generated-secret```
 

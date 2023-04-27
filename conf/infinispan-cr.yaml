@@ -14,7 +14,7 @@ spec:
     artifacts:
       - maven: 'org.postgresql:postgresql:42.3.1'
       - url: >-
-          https://github.com/torbjorndahlen/infinispan-evict-cache/raw/main/ServerTask/target/ServerTask-1.0-SNAPSHOT.jar
+          https://github.com/torbjorndahlen/infinispan-evict-cache/raw/main/ServerTask/server/target/ServerTask.jar
   service:
     type: DataGrid
   replicas: 1

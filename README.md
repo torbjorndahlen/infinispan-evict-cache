@@ -1,14 +1,15 @@
 # infinispan-evict-cache
 Server Task that evicts and reloads an SQL cache store
 
-## PostgreSQL DB
+## PostgreSQL
 
-Deploy a Posgresql DB in the same Openshift namespace as DataGrid.
-Create a table to be used as input to the DataGrid SQL cache store.
+Deploy Posgresql in the same Openshift namespace as Data Grid.
+Create a table to be used as input to the Data Grid SQL cache store.
 
 ```
 $ oc new-project infinispan-demo
-$ oc new-build \ >https://github.com/torbjorndahlen/infinispan-evict-cache \
+$ oc new-build \ 
+> https://github.com/torbjorndahlen/infinispan-evict-cache \
 > --strategy=docker \
 > --name='postgresql-12-custom'
 
@@ -37,6 +38,15 @@ $ oc exec postgresql-12-custom-54cb5fbd6-55rkf -- psql -U infinispan -d rpi-stor
 
 ```
 
+## Server Task
+
+Build the server task:
+```
+mvn clean package
+```
+
+The server jar is located under ```server/target``` and needs to be added as a dependency artifact to the DataGrid Operator, for example by uploading to an HTTP server and providing the URL to the jar file to the Infinispan CR.
+
 ## Data Grid
 
 Deploy Data Grid in Openshift using the DataGrid Operator
@@ -59,23 +69,7 @@ $ oc apply -f subscription.yaml
 $ oc create -f infinispan-cr.yaml
 ```
 
-
-
-### Open the DataGrid Admin Console
-
-The username and password for the Admin Console is located under Secrets in ```infinispan-generated-secret```
-
-Get the LoadBalancer external hostname with ```oc get svc```.
-Access the DataGrid console with ```http://<loadbalancer>:11222```
-
-1. Create a Protobuf schema using the ```example.proto``` file
-
-2. Use the DataGrid console to create a cache named "rpi-store"
-
-3. Use ```sql-cache-store-config.json``` to configure the cache to use the Postgrsql DB as SQL cache store
-
-
-## Create the cache
+## Cache
 
 Find the URL to the Data Grid admin console:
 ```
@@ -84,7 +78,9 @@ NAME                         TYPE          CLUSTER-IP   EXTERNAL-IP         PORT
 example-infinispan-external  LoadBalancer  172.30.5.74  my_host.example.com 11222:31797/TCP   6m39s
 ```
 
-In this example, we exposed Data Grid through a loadbalancer. The URL to the Data Grid contains the loadbalancer hostname and port. In this example the Data Grid console can be accessed at http://my_host.example.com:11222. The console username and password is stored in the infinispan-generated-secret.
+In this example, we exposed Data Grid through a loadbalancer. The URL to the Data Grid contains the loadbalancer hostname and port. In this example the Data Grid console can be accessed at http://my_host.example.com:11222. 
+
+The console username and password is stored in the infinispan-generated-secret:
 
 ```
 $ oc get secret infinispan-generated-secret -o yaml
@@ -105,6 +101,13 @@ credentials:
 ```
 
 Using the Data Grid console, create a cache using a protobuf schema and SQL cache store configuration.
+
+1. Create a Protobuf schema using the ```example.proto``` file
+
+2. Use the DataGrid console to create a cache named "rpi-store"
+
+3. Use ```sql-cache-store-config.json``` to configure the cache to use the Postgrsql DB as SQL cache store
+
 
 ### Protobuf schema
 ```
@@ -159,24 +162,15 @@ message model_value {
  }
 ```
 
-## Server Task
-
-### Build the server task
-```
-mvn clean package
-```
-
-The server jar is located under server/target and needs to be added as a dependency artifact to the DataGrid Operator, for example by uploading to an HTTP server and providing the URL to the jar file to the Infinispan CR.
-
 ## Make an update to a row in the ```model``` table:
 
 ```
-oc exec postgresql-12-custom-54cb5fbd6-55rkf -- psql -U infinispan -d rpi-store -c "update model set name = 'Raspberry Pi One' where id = 1;"
+oc exec postgresql-12-custom-54cb5fbd6-55rkf -- psql -U postgres -d rpi-store -c "update model set name = 'Raspberry Pi One' where id = 1;"
 ```
 
 ## Client
 
-### Build the client
+### Build the client:
 
 ```
 mvn clean package

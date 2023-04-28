@@ -83,19 +83,11 @@ In this example, we exposed Data Grid through a loadbalancer. The URL to the Dat
 The console username and password is stored in the infinispan-generated-secret:
 
 ```
-$ oc get secret infinispan-generated-secret -o yaml
-
-apiVersion: v1
-data:
-  identities.yaml: Y3JlZGVudGlhbHM6Ci0gdXNlcm5hbWU6IGRldmVsb3BlcgogIHBhc3N3b3JkOiBTRllsbWJYZWJhUllxWWtwCiAgcm9sZXM6CiAgLSBhZG1pbgo=
-
-... output omitted
-
-$ echo Y3JlZGVudGlhbHM6Ci0gdXNlcm5hbWU6IGRldmVsb3BlcgogIHBhc3N3b3JkOiBTRllsbWJYZWJhUllxWWtwCiAgcm9sZXM6CiAgLSBhZG1pbgo= | base64 -d
+$ oc get secret infinispan-generated-secret -o jsonpath="{.data.identities\.yaml}" | base64 --decode
 
 credentials:
 - username: developer
-  password: <password>
+  password: my_password
   roles:
   - admin
 ```
@@ -165,8 +157,37 @@ message model_value {
 ## Make an update to a row in the ```model``` table:
 
 ```
-oc exec postgresql-12-custom-54cb5fbd6-55rkf -- psql -U postgres -d rpi-store -c "update model set name = 'Raspberry Pi One' where id = 1;"
+oc exec postgresql-12-custom-54cb5fbd6-55rkf -- psql -U postgres -d rpi-store -c "update model set name = 'Raspberry Pi UPDATED' where id = 1;"
 ```
+
+Verify that the cache doesn't contain the updated entry by using the Infinispan CLI to lookup the key 1 in the cache:
+
+```
+$ oc get pods
+NAME             READY   STATUS      RESTARTS   AGE
+infinispan-0     1/1     Running     0          86s
+
+$ oc rsh infinispan-0
+
+sh-4.4$ ./bin/cli.sh 
+[disconnected]> connect
+Username: developer
+Password: my_password
+[infinispan-0-28040@infinispan//containers/default]> cd caches
+[infinispan-0-28040@infinispan//containers/default/caches]> cd rpi-store
+[infinispan-0-28040@infinispan//containers/default/caches/rpi-store]> get 1
+{
+  "_type" : "example.model_value",
+  "name" : "Raspberry Pi",
+  "model" : "B",
+  "soc" : "BCM2835",
+  "memory_mb" : 256,
+  "ethernet" : true,
+  "release_year" : 2012
+}
+```
+The cache hasn't been notified about the modified row and still contains the name "Raspberry Pi".
+To load the modified entry into the cache we run the client. 
 
 ## Client
 
@@ -186,4 +207,30 @@ java -cp target/ServerTaskClient-jar-with-dependencies.jar \
 ```
 Note: use ```oc get svc``` to find the LoadBalancer hostname and ```oc get secret infinispan-generated-secret -o yaml``` to get the username and password.
 
+Verify that the cache now contains the modified entries by using the Infinispan CLI to lookup the key 1 in the cache:
+
+```
+$ oc get pods                                                                                                                                     
+NAME                    READY   STATUS      RESTARTS   AGE
+infinispan-0            1/1     Running     0          17m
+
+$ oc rsh infinispan-0
+
+sh-4.4$ ./bin/cli.sh 
+[disconnected]> connect
+Username: developer
+Password: my_password
+[infinispan-0-28040@infinispan//containers/default]> cd caches
+[infinispan-0-28040@infinispan//containers/default/caches]> cd rpi-store
+[infinispan-0-28040@infinispan//containers/default/caches/rpi-store]> get 1
+{
+  "_type" : "example.model_value",
+  "name" : "Raspberry Pi UPDATED",
+  "model" : "B",
+  "soc" : "BCM2835",
+  "memory_mb" : 256,
+  "ethernet" : true,
+  "release_year" : 2012
+}
+```
 
